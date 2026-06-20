@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملف الإنجاز الإلكتروني | Alaa-Alasouli</title>
+    <style>
+        /* --- المتغيرات العامة والتصميم الأساسي --- */
+        :root {
+            --primary-color: #1a365d;
+            --secondary-color: #2b6cb0;
+            --accent-color: #319795;
+            --bg-color: #f7fafc;
+            --text-color: #2d3748;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            padding-bottom: 60px;
+        }
+
+        /* --- شريط التنقل (Navbar) --- */
+        nav {
+            background-color: var(--primary-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            color: var(--white);
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+
+        .nav-links a {
+            color: #cbd5e0;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+                        margin-right: 40px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--white);
+            background-color: var(--secondary-color);
+        }
+
+        /* --- الهيكل العام للصفحات --- */
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page {
+            display: none; /* إخفاء الصفحات افتراضياً */
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .page.active-page {
+            display: block; /* إظهار الصفحة النشطة فقط */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- المكونات المشتركة (البطاقات العناوين) --- */
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        /* --- تصميم الصفحة الأولى --- */
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--white);
+            text-align: center;
+            padding: 50px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .header-banner h1 { font-size: 2.2rem; margin-bottom: 10px; }
+        .header-banner p { font-size: 1.2rem; opacity: 0.9; }
+
+        .profile-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-section { grid-template-columns: 1fr; }
+            .nav-container { flex-direction: column; gap: 15px; }
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-right: 4px solid var(--secondary-color);
+        }
+
+        .info-label { font-weight: bold; color: var(--primary-color); display: block; }
+
+        .profile-img-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #edf2f7;
+            border-radius: var(--radius);
+            border: 2px dashed #cbd5e0;
+            min-height: 200px;
+        }
+
+        .profile-placeholder {
+            color: #718096;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* الجداول */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 12px 15px;
+            text-align: right;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+
+        tr:nth-child(even) { background-color: #f8fafc; }
+
+        /* قائمة الخبرات */
+        .experience-list { list-style: none; }
+        .experience-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #edf2f7;
+            position: relative;
+            padding-right: 20px;
+        }
+        .experience-list li::before {
+            content: "•";
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            position: absolute;
+            right: 0;
+            top: 2px;
+        }
+
+        /* --- تصميم الصفحة الثانية --- */
+        .statement-text {
+            text-align: justify;
+            font-size: 1.1rem;
+            white-space: pre-line;
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border-right: 4px solid var(--accent-color);
+        }
+
+        .links-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(580px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .links-card {
+            background: var(--white);
+            border-top: 4px solid var(--primary-color);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .evidence-link {
+            display: inline-block;
+            background: #edf2f7;
+            color: var(--primary-color);
+            text-decoration: none;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .evidence-link:hover {
+            background: var(--secondary-color);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* --- تصميم الصفحة الثالثة --- */
+        .meta-info-initiative {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .meta-box {
+            background: #ebf8ff;
+            color: #2b6cb0;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .role-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .role-box {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .role-box h4 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 5px;
+        }
+
+        .bullet-list {
+            list-style-type: none;
+            padding-right: 5px;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-right: 20px;
+            margin-bottom: 8px;
+        }
+
+        .bullet-list li::before {
+            content: "✓";
+            color: var(--accent-color);
+            position: absolute;
+            right: 0;
+            font-weight: bold;
+        }
+
+        .impact-box {
+            background: #f0fff4;
+            border-right: 4px solid #38a169;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+            color: #276749;
+        }
+
+        /* --- التذييل (Footer) --- */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 15px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- شريط التنقل العلوي -->
+    <nav>
+        <div class="nav-container">
+            <a class="logo" href="#">Alaa-Alasouli</a>
+            <ul class="nav-links">
+                <li><a onclick="switchPage('page1')" id="link-page1" class="active">الصفحة الرئيسية</a></li>
+                <li><a onclick="switchPage('page2')" id="link-page2">رحلة الدبلوم والمعايير</a></li>
+                <li><a onclick="switchPage('page3')" id="link-page3">بصمات تربوية</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+        <!-- ==================== الصفحة الأولى ==================== -->
+        <div id="page1" class="page active-page">
+            <div class="header-banner">
+                <h1>ملف الإنجاز الإلكتروني</h1>
+                <p>الدبلوم المهني في التعليم</p>
+            </div>
+
+            <div class="card">
+                <h2>1. المعلومات الشخصية</h2>
+                <div class="profile-section">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">اسم المعلم الطالب:</span>
+                            <span>علاء عبدالله احمد العسولي</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">التخصص والمسار:</span>
+                            <span>تكنولوجيا معلومات / BTEC</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">اسم المرشد الأكاديمي:</span>
+                            <span>أحمد الحجاحجة</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">الرقم الوزاري / الأكاديمي:</span>
+                            <span>146914</span>
+                        </div>
+                    </div>
+                    <div class="profile-img-container">
+                        <div class="profile-placeholder">
+                            <span><img src="11111.jpg" width=500 height=350></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>2. المؤهلات الأكاديمية</h2>
+                <div class="info-item" style="max-width: max-content;">
+                    <span class="info-label">بكالوريوس علوم الحاسوب</span>
+                    <span>سنة التخرج: 2004 م</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>3. الخبرات التدريسية</h2>
+                <ul class="experience-list">
+                    <li>معلم في وزارة التربية والتعليم (2006 - 2008)</li>
+                    <li>معلم في المملكة العربية السعودية (2008 - 2021)</li>
+                    <li>معلم في وزارة التربية والتعليم (2021 - لغاية الآن)</li>
+                </ul>
+            </div>
+
+            <div class="card" style="overflow-x: auto;">
+                <h2>4. الدورات التدريبية</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اسم البرنامج التدريبي والتطويري</th>
+                            <th>المدة والجهة المانحة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>ICDL - رخصة قيادة الحاسوب الدولية</td><td>وزارة التربية والتعليم - 60 ساعة</td></tr>
+                        <tr><td>INTEL - برنامج إنتل التعليمي</td><td>وزارة التربية والتعليم - 160 ساعة</td></tr>
+                        <tr><td>برنامج بناء قدرات المعلمين</td><td>وزارة التربية والتعليم - 45 ساعة</td></tr>
+                        <tr><td>المناهج المطورة (المهارات الرقمية)</td><td>وزارة التربية والتعليم - 60 ساعة</td></tr>
+                        <tr><td>سراج - المساعد الذكي</td><td>وزارة التربية والتعليم - 30 ساعة</td></tr>
+                        <tr><td>BTEC كفايات</td><td>وزارة التربية والتعليم - 20 ساعة</td></tr>
+                        <tr><td>BTEC EDUCATOR</td><td>وزارة التربية والتعليم - 30 ساعة</td></tr>
+                        <tr><td>Oracle9i Form developer & SQL</td><td>مركز منسي للتكنولوجيا - 60 ساعة</td></tr>
+                        <tr><td>SOLARIS UNIX (Introduction Unix & Solaris Administration)</td><td>شركة الامتياز للأنظمة الإلكترونية - 40 ساعة</td></tr>
+                        <tr><td>OMNIDOCS Client & Administrator</td><td>شركة الامتياز للأنظمة الإلكترونية - 24 ساعة</td></tr>
+                        <tr><td>أساليب وطرق التدريس الحديثة</td><td>جامعة دار العلوم الأهلية بالرياض - 12 ساعة</td></tr>
+                    </tbody>
+                </table>
+            </div>
+<br>
+<br>
+<br>
+    <footer>
+        جميع الحقوق محفوظة &copy; 2026 |   اكاديمية الملكة رانيا لتدريب المعلمين  | المعلم علاء العسولي
+    </footer>
+        </div>
+
+
+        <!-- ==================== الصفحة الثانية ==================== -->
+        <div id="page2" class="page">
+            <div class="card">
+                <h2>الجزء الأول: رحلة الدبلوم (البيان الختامي)</h2>
+                <div class="statement-text">
+                    التحقت بالدبلوم المهني انطلاقًا من إيماني العميق بأهمية التطوير المهني المستمر للمعلم، ورغبتي في تحسين ممارساتي التعليمية بما يتوافق مع متطلبات التعليم الحديث والتطورات المتسارعة في مجالات التكنولوجيا والتعلم الرقمي. كما سعيت إلى اكتساب معارف ومهارات جديدة تساعدني على توفير بيئة تعلم أكثر فاعلية وجاذبية للطلبة، وتمكنني من مواكبة التغيرات التي يشهدها قطاع التعليم في القرن الحادي والعشرين، بما ينعكس إيجابًا على مستوى تعلم الطلبة ودافعيتهم نحو التعلم.
+
+                    قبل الالتحاق بالبرنامج، كنت أحمل مجموعة من الأهداف والتوجهات المهنية التي أسعى إلى تحقيقها، ومن أبرزها تطوير مهاراتي في التخطيط للتعليم والتعلم، وتوظيف استراتيجيات تدريس حديثة تراعي الفروق الفردية بين الطلبة، بالإضافة إلى تعزيز قدرتي على استخدام التكنولوجيا والموارد الرقمية بصورة أكثر فاعلية داخل الغرفة الصفية. كما كنت أتطلع إلى تنمية مهارات التأمل الذاتي والتقييم المستمر للممارسات التعليمية بهدف تحسين جودة التعلم وتحقيق نتائج أفضل للطلبة، وإيجاد فرص تعليمية متنوعة تسهم في تنمية مهارات التفكير العليا لديهم.
+
+                    خلال رحلة الدبلوم، مررت بتجارب تعليمية ثرية ومتنوعة أسهمت في إحداث تغييرات واضحة في معارفي وممارساتي واتجاهاتي المهنية. فقد توسعت معرفتي بالمفاهيم التربوية الحديثة، وأصبحت أكثر وعيًا بأهمية بناء بيئات تعلم داعمة ومحفزة تركز على المتعلم وتمنحه دورًا فاعلًا في عملية التعلم. كما تعرفت إلى استراتيجيات متنوعة للتعليم والتقييم، وأصبحت أكثر قدرة على تصميم أنشطة تعلم تراعي احتياجات الطلبة المختلفة وتشجعهم على التفكير والإبداع والتعاون وحل المشكلات. كذلك أسهمت المهمات والأنشطة التطبيقية التي تضمنها البرنامج في ربط الجانب النظري بالممارسة العملية، الأمر الذي ساعدني على تطوير فهم أعمق لعملية التعليم والتعلم.
+
+                    وعلى صعيد الممارسات التعليمية، انعكس ما تعلمته في الدبلوم بشكل مباشر على أدائي داخل الصف. فقد أصبحت أكثر حرصًا على التخطيط المنظم للدروس وفق أهداف واضحة ومحددة، وتوظيف التكنولوجيا التعليمية بصورة هادفة تدعم تعلم الطلبة وتعزز مشاركتهم، واستخدام أدوات تقييم متنوعة تساعدني على متابعة تعلمهم وتقديم التغذية الراجعة المناسبة لهم. كما ساعدني البرنامج على تطوير مهاراتي في التأمل المهني وتحليل المواقف التعليمية واتخاذ قرارات تربوية تستند إلى الأدلة والممارسات الفاعلة. وأصبحت أكثر اهتمامًا بتوفير فرص تعلم نشطة تشجع الطلبة على الاستقصاء والتجريب والعمل التعاوني، بما يسهم في تنمية شخصياتهم ومهاراتهم الحياتية.
+
+                    أما فيما يتعلق باتجاهاتي المهنية، فقد عزز الدبلوم لدي قناعة راسخة بأن التعلم المهني رحلة مستمرة لا تتوقف عند حد معين، وأن المعلم الناجح هو الذي يسعى دائمًا إلى تطوير ذاته وممارساته بما يحقق أفضل فرص التعلم لطلبته. كما ازداد تقديري لأهمية العمل التعاوني وتبادل الخبرات مع الزملاء، وأصبحت أكثر انفتاحًا على التجديد والتطوير وتجربة الأساليب التعليمية الحديثة، وأكثر استعدادًا لتبني المبادرات التي تسهم في تحسين العملية التعليمية ورفع مستوى تعلم الطلبة.
+
+                    وفي ختام هذه الرحلة المهنية المميزة، أستطيع القول إن الدبلوم المهني شكّل تجربة تعليمية ثرية أضافت إلى خبرتي الكثير من المعارف والمهارات والقيم المهنية التي سأستثمرها في مسيرتي التعليمية مستقبلًا. كما أتطلع إلى مواصلة التعلم والتطوير والاستفادة من كل فرصة تسهم في تحسين أدائي المهني وخدمة طلبتي بصورة أفضل.
+
+                    وأتقدم بجزيل الشكر والتقدير إلى المرشد الأكاديمي الأستاذ أحمد الحجاحجة على دعمه المستمر وتوجيهاته القيّمة وملاحظاته البنّاءة التي أسهمت في تطوير أدائي المهني وتعزيز خبرتي التعليمية. لقد كان لدوره أثر كبير في نجاح هذه التجربة وإثراء مسيرتي المهنية، فله مني خالص الامتنان والتقدير، مع أطيب الأمنيات له بدوام الصحة والتوفيق والنجاح.
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>الجزء الثاني: معايير المعلمين والشواهد</h2>
+              
+                
+                <div class="links-section">
+<p>
+                    <!-- القسم الأول -->
+                    <div class="links-card">
+          
+                        <h3>أولًا: أدلة المعرفة المهنية</h3>
+<p style="color: #718096; margin-bottom: 20px;">المقال النقدي والمقال التأملي:</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1eTVZVn9BpzN4joAwwawLwIbWqTwXgK6F/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="documentFrame" target="_blank">
+المقال التأملي</a>       
+    
+<a href="https://docs.google.com/document/d/16h1kXheydQqj3Mh9S7mdik6FY0d8h1LP/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+المقال النقدي</a>       
+    </div>
+<p style="color: #718096; margin-bottom: 20px;">تحليل محتوى دروس:</p>
+
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1qDSO46OxUVSUlxUbr-kmOpSBm93phq3K/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+تحليل محتوى درس
+</a>       
+     
+    </div>
+
+<p style="color: #718096; margin-bottom: 20px;">نماذج من مهمات المساق الأول الرئيسية:</p>
+
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1kUXT64cgI8Av1s5B1ngn5iN9fv5HWqUD/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+ممارسات تعليمية تدعم الطلبة
+</a>       
+<a href="https://docs.google.com/document/d/19sz9SWgXcSeR-f_EmjCFvMDOdc9b9ZRr/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+نماذج تطبيقية في التمايز
+</a>  
+<a href="https://docs.google.com/document/d/1sgH9nTR4URwp1e69I3feY9wtnAFDcFn-/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+الإطار العام للمنهاج
+</a>  
+<a href="https://docs.google.com/document/d/1jes203gwPteJK0tk_5Jkx8d6SZJ8PzKS/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+التخطيط في ضوء نظريات التعلم والخصائص النمائية
+</a>  
+     
+    </div>
+<p style="color: #718096; margin-bottom: 20px;">نماذج من دراسة الحالة من المساق الأول:</p>
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1pQhtqRTErgdR777lLPea4qQ7oOic6dGo/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+دراسة الحالة1</a>       
+    
+<a href="https://docs.google.com/document/d/1MKbK3_gij77oU6vaDVtoQiX_Oq3LIGYp/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+دراسة الحالة2</a>       
+    </div>
+
+<p style="color: #718096; margin-bottom: 20px;">تحليل ممارسات صفية بناء على فهم المساق الأول:</p>
+
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1wDBoRsm7UCuvp4miM24OG9kVl8WLQlbh/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+دمج حالة
+</a>       
+     
+    </div>
+ </div>
+
+               </p>
+<p>
+                    <!-- القسم الثاني -->
+                    <div class="links-card">
+          
+                        <h3>أولًا: أدلة المعرفة المهنية</h3>
+<p style="color: #718096; margin-bottom: 20px;">خطط دروس توضح دمج المعرفة التربوية بالمبحث تعكس فهما واضحا للدمج والتمايز في بيئة التعلم:</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1qXFmT59mfpvSeY1EBn5Md-wzknZK2vaK/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+خطة درس 1</a>       
+    
+<a href="https://docs.google.com/document/d/18v2uyCBN7XW9R92pA5RNZgxuOm4ar0c9/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+خطة درس 2</a> 
+<a href="https://docs.google.com/document/d/19g_sD7HmsHC-Rj6EaAa0zI3JaZgbqOsQ/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+خطة درس 3</a>       
+    
+<a href="https://docs.google.com/document/d/1ovLaXxWogZ3af8X6QRn8I_lXP2zrkE7i/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+خطة درس 4</a>      
+    </div>
+<p style="color: #718096; margin-bottom: 20px;">أنشطة صفية مبتكرة:</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1UOWVWsNIJRG9Ia3Zyt-7vf_Z0Qv6ssu3/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+دمج اصحاب العلاقة</a>       
+    
+<a href="https://docs.google.com/document/d/1HUK-G-tI0klk3x7YsP3fanoXwN8gdmC4/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+ممارسة التفكير التأملي </a> 
+<a href="https://docs.google.com/document/d/1qyKkUKKi0kdbEToGWqI9aJlYDc5i4Bfo/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+خطة درس</a>       
+    
+<a href="https://docs.google.com/document/d/1c4Szrup3mOgVqD4oSKYo9g4xALHJiDdG/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+I -CARE</a>      
+    </div>
+<p style="color: #718096; margin-bottom: 20px;">نماذج من مهمات المساق الثاني الرئيسية:</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/10DTVmvF4EU0acnZfFQh-EmNFyF27MYlC/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+المهمة  القبلية</a>       
+    
+<a href="https://docs.google.com/document/d/1-Gc_AOoR7uKy-U7OU46nmeUM69kZ0Eff/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+دراسة حاله </a> 
+<a href="https://docs.google.com/document/d/1qQgxqP7j8D4lFnfGXfCWsQl8_R1m01jn/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+ أساليب تدريس المبحث
+</a>       
+   
+    </div>
+
+<p style="color: #718096; margin-bottom: 20px;">البحث الاستقصائي:</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1TC5gLnzwv6eZ45GY1EaSc4AlJ8ojDkl-/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+مخطط البحث الاستقصائي</a>       
+    
+
+<a href="https://docs.google.com/document/d/1FCfX1W-faZ2xlbeYPaeEAq0TPeieIZGE/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+ تقرير البحث الاستقصائي 
+</a>  
+    
+   
+    </div>
+<p>صور وفيديوهات تطبيق البحث الاستقصائي </p> 
+                <table>
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+<td>   <span><img src="1.png" width=200 height=150></span> </td>
+<td>   <span><img src="2.png" width=200 height=150></span> </td>
+<td>   <span><img src="3.png" width=200 height=150></span> </td>
+<td>   <span><img src="4.png" width=200 height=150></span> </td>
+
+
+</tr>
+
+
+                    </tbody>
+                </table>
+<p>(البوستر) العرض التقديمي لتقرير البحث الاستقصائي  </p> 
+<center><span><img src="5.jpg" width=500 height=700></span></center>
+
+<p style="color: #718096; margin-bottom: 20px;">أدوات تقويم تم إعدادها أو اختبارات وجدول المواصفات:</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSeXgrOiT6ttxA7QoEtX8mEs9kXtcDz_9ca8EQptoAV6dKkJfg/viewform?usp=header" target="_blank">
+اختبار الكتروني</a>       
+    
+
+<a href="https://docs.google.com/spreadsheets/d/1z8XSoqW2AgiUXLnmKGPdNFlVNSD-Xwid/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+ جدول مواصفات 
+</a>       
+   
+    </div>
+
+ </p>
+                    
+<p style="color: #718096; margin-bottom: 20px;">استخدام أدوات رقمية في التدريس:</p>
+
+<center>
+<img src="6.jpg" width=400 height=450></span>
+<img src="7.jpg" width=400 height=450></span>     
+</center>    
+<div class="nav-links">
+<p><a href="https://docs.google.com/document/d/1b7y30elTkG71p7L5vyCiAjdtRy_EMwRZ/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+خطة درس تتضمن مجموعة من الادوات الرقمية
+</a>  
+ </div>
+<p style="color: #718096; margin-bottom: 20px;">أداة التطور المهني البنائية والختامية :</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1aJqg_E2e2gjSiOWXpwXXpnV10rKEi1k2/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+أداة التطور المهني البنائية 
+</a>       
+    
+
+<a href="https://docs.google.com/document/d/12_PfiN0lITE3UBYiQLHzwSdVsKxX_wHv/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+أداة التطور المهني الختامية 
+</a>       
+   
+    </div>
+<p style="color: #718096; margin-bottom: 20px;">تقرير الجلسة الإرشادية البنائية والختامية :</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1bArnmFxZnBcfDLZsAjRZD8iuI43PbNkV/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+التقرير الختامي
+</a>       
+
+    </div>
+<p style="color: #718096; margin-bottom: 20px;">نموذج التغذية الراجعة للتدريس المصغر ( عدد 2) :</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1RzxAJQkvcgIXlUMDLcopwzGwXz_T3k5f/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+التغذية الراجعة 1</a>    
+<a href="https://docs.google.com/document/d/1v1jJh8lqEsYP8-w4oBki1hk9OHi520SW/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+التغذية الراجعة 2</a>     
+
+    </div>
+<p style="color: #718096; margin-bottom: 20px;">نموذج الملاحظة الرسمية (عدد 2) :</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/1Fo7k1Z1y2BNKpn0G-QW7pUyJutUUKjMP/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+الملاحظة الرسمية 1</a>    
+<a href="https://docs.google.com/document/d/1BDtmeWgMrdUEExh8QaBp1c-uIfZ1LC3y/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+الملاحظة الرسمية 2</a>     
+
+    </div>
+      </div>
+</p>
+
+<p> 
+                    <!-- القسم الثالث -->
+                    <div class="links-card">
+          
+                        <h3>ثالثًا: أدلة الأخلاقيات المهنية</h3>
+<p style="color: #718096; margin-bottom: 20px;">شهادات  حضور لدورات تدريبية:</p>
+                <table>
+                    <thead>
+
+                    </thead>
+                    <tbody>
+                        <tr>
+<td>   <span><img src="10.png" width=200 height=150></span> </td>
+<td>   <span><img src="20.png" width=200 height=150></span> </td>
+<td>   <span><img src="30.png" width=200 height=150></span> </td>
+<td>   <span><img src="40.png" width=200 height=150></span> </td>
+
+
+</tr>
+
+
+                    </tbody>
+                </table>
+<p style="color: #718096; margin-bottom: 20px;">تقييمات من مشرفين أو من الصديق الناقد أو مدير المدرسة:</p>
+
+<div class="nav-links">
+
+<a href="https://drive.google.com/file/d/1rqnVZOYp0AOuvvbsMQbIs4bBs1c0PCIL/view?usp=drive_link" target="_blank">
+مدير المدرسة</a>       
+    
+<a href="https://docs.google.com/document/d/1f-ieRhoMEgWgTeNZF4GDyrCx28bB8pZw/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+الصديق الناقد</a> 
+
+
+       </div>
+<p style="color: #718096; margin-bottom: 20px;">خطة تطوير مهني مستقبلية:</p>
+
+<div class="nav-links">
+
+<a href="https://docs.google.com/document/d/18YxgPETTOZK3fbnFkgqR4fUQxLzttD2Y/edit?usp=drive_link&ouid=115395860569973866362&rtpof=true&sd=true" target="_blank">
+خطتي المستقبلية</a>       
+
+       </div>
+       
+</div>
+<p style="color: #718096; margin-bottom: 20px;">مقطع الفيديو الذي تم تصويره في اللقاء التأملي:</p>
+<center>
+<video width="420" height="340" controls>
+  <source src="1.mp4" type="video/mp4">
+
+مقطع الفيديو الذي تم تصويره في اللقاء التأملي
+</video>
+</center>
+</p>
+
+
+ </div>
+ </div>
+    <footer>
+        جميع الحقوق محفوظة &copy; 2026 |   اكاديمية الملكة رانيا لتدريب المعلمين  | المعلم علاء العسولي
+    </footer>
+</div>
+
+        <!-- ==================== الصفحة الثالثة ==================== -->
+        <div id="page3" class="page">
+            <div class="card">
+                <h2>بصمات تربوية</h2>
+                <h3 style="margin-top: 10px; color: var(--primary-color);">مبادرة: البنية التحتية لتكنولوجيا المعلومات</h3>
+                <p style="margin-bottom: 20px; font-size: 1.05rem; text-align: justify;">
+                    تتضمن هذه المبادرة اصطحاب طلاب الأول ثانوي تكنولوجيا المعلومات إلى مختبر الثاني ثانوي قيد الإنشاء للتعرف على كيفية إنشاء البنية التحتية لتكنولوجيا المعلومات، وربط الجانب النظري بأنظمة تكنولوجيا المعلومات الإدارية، وفهم الأسس الاستراتيجية للبنية الأساسية للشبكات وتطبيق مفاهيم الوحدة الدراسية المقررة لهذا الفصل.
+                </p>
+
+                <div class="meta-info-initiative">
+                    <div class="meta-box">📍 مدرسة عثمان بن عفان الثانوية للبنين / عجلون</div>
+                    <div class="meta-box">👥 الفئة: الصف الأول الثانوي / تكنولوجيا معلومات</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>١. دور المعلم والطالب في المبادرة</h2>
+                <div class="role-grid">
+                    <div class="role-box">
+                        <h4>التخطيط للزيارة</h4>
+                        <ul class="bullet-list">
+                            <li>التخطيط للزيارة الميدانية وربطها بمخرجات التعلم الخاصة بوحدة البنية التحتية لتكنولوجيا المعلومات.</li>
+                            <li>التنسيق مع إدارة المدرسة والقائمين على إنشاء المختبر لتحديد موعد الزيارة ومحاورها.</li>
+                            <li>إعداد أسئلة وأنشطة موجهة تساعد الطلبة على ملاحظة مكونات البنية التحتية للشبكات والأنظمة الإدارية.</li>
+                        </ul>
+                    </div>
+                    <div class="role-box">
+                        <h4>التنفيذ والمتابعة</h4>
+                        <ul class="bullet-list">
+                            <li>مرافقة الطلبة أثناء الزيارة وشرح أهدافها التعليمية.</li>
+                            <li>توجيه الطلبة لملاحظة مكونات المختبر مثل الخوادم، وحدات الشبكات، الكابلات، وأجهزة الربط المختلفة.</li>
+                            <li>ربط المفاهيم النظرية التي تمت دراستها في الصف بالتطبيقات العملية التي شاهدوها في المختبر.</li>
+                            <li>تشجيع الطلبة على طرح الأسئلة والمناقشة والتفاعل مع المختصين المشرفين على المشروع.</li>
+                        </ul>
+                    </div>
+                    <div class="role-box">
+                        <h4>التقييم وأثر النشاط</h4>
+                        <ul class="bullet-list">
+                            <li>مناقشة الطلبة بعد الزيارة للتأكد من فهمهم لمفاهيم البنية التحتية لتكنولوجيا المعلومات.</li>
+                            <li>تكليف الطلبة بإعداد تقرير أو عرض تقديمي يلخص ما تعلموه خلال الزيارة.</li>
+                            <li>تقييم مدى تحقيق أهداف الزيارة من خلال ملاحظات الطلبة وإجاباتهم وأنشطتهم اللاحقة.</li>
+                        </ul>
+                        <div class="impact-box">
+                            <strong>أثر النشاط:</strong> ساهمت الزيارة في تعزيز فهم الطلبة لمكونات البنية التحتية، وتنمية قدرتهم على الربط بين الجوانب النظرية والعملية، وزيادة دافعيتهم.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>٢. الأثر والنتائج</h2>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div>
+                        <strong>ما التغيير الذي حدث؟</strong>
+                        <p>حدث تحسن ملحوظ في فهم الطلبة لمفهوم البنية التحتية لتكنولوجيا المعلومات، حيث انتقلوا من التعرف على المفاهيم بصورة نظرية داخل الصف إلى مشاهدتها وتطبيقها في بيئة واقعية. كما ازدادت قدرتهم على الربط بين مكونات الشبكات والأنظمة الإدارية ودورها في المؤسسات المختلفة.</p>
+                    </div>
+                    <div>
+                        <strong>هل هناك شواهد على تحسّن أداء الطلبة أو تفاعلهم؟</strong>
+                        <ul class="bullet-list" style="margin-top: 5px; padding-right: 15px;">
+                            <li>زيادة مشاركة الطلبة في المناقشات الصفية المتعلقة بالبنية التحتية والشبكات.</li>
+                            <li>طرح أسئلة متقدمة أثناء الزيارة وبعدها تعكس عمق الفهم والاهتمام بالموضوع.</li>
+                            <li>تحسن نتائج الطلبة في الأنشطة والتكليفات المرتبطة بالوحدة الدراسية.</li>
+                            <li>قدرة الطلبة على توظيف المصطلحات التقنية بصورة صحيحة عند إعداد التقارير.</li>
+                            <li>إظهار حماس أكبر نحو التخصصات التقنية ومجالات تكنولوجيا المعلومات.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <strong>هل تم توسيع المبادرة أو تبنّيها من قبل زملاء آخرين؟</strong>
+                        <p>نعم، تم عرض تجربة الزيارة الميدانية على الزملاء في القسم لما حققته من أثر إيجابي على تعلم الطلبة، وأبدى عدد منهم اهتمامًا بتوظيف الزيارات التعليمية والأنشطة التطبيقية في تدريس وحدات أخرى. كما شجعت التجربة على تعزيز التعاون بين المعلمين وإدارة المدرسة للاستفادة من المختبر الجديد في تنفيذ أنشطة عملية مستقبلية تخدم مختلف المساقات التقنية.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>٣. تأمل ذاتي حول المبادرة</h2>
+                <div class="role-grid">
+                    <div class="role-box" style="border-right: 4px solid var(--primary-color);">
+                        <h4>ماذا تعلمت من هذه التجربة؟</h4>
+                        <p>تعلمت أهمية ربط الجانب النظري بالتطبيق العملي في تدريس تكنولوجيا المعلومات، وأن توفير خبرات تعليمية واقعية يسهم في ترسيخ المفاهيم لدى الطلبة بصورة أعمق. كما أدركت قيمة التعلم القائم على الخبرة والملاحظة المباشرة في تعزيز دافعية الطلبة للتعلم وتنمية فضولهم نحو المجالات التقنية. كذلك اكتسبت خبرة أكبر في التخطيط للأنشطة الميدانية وتنظيمها بما يحقق أهداف التعلم المنشودة.</p>
+                    </div>
+                    <div class="role-box" style="border-right: 4px solid var(--accent-color);">
+                        <h4>كيف أثّرت على تطورك المهني؟</h4>
+                        <p>أسهمت هذه التجربة في تطوير ممارساتي التعليمية من خلال توظيف استراتيجيات تعلم أكثر تفاعلية وتركيزًا على المتعلم. كما عززت قدرتي على تصميم أنشطة تربط المعرفة النظرية بواقع الحياة العملية، مما ساعدني على تقديم تعلم أكثر معنى للطلبة. كذلك زادت من مهاراتي في التخطيط والتنسيق والتقييم، وشجعتني على البحث عن فرص جديدة لإثراء بيئة التعلم بالأنشطة التطبيقية والزيارات الميدانية، بما ينسجم مع متطلبات التعليم الحديث ويعزز جودة العملية التعليمية.</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="card">
+                <h2>الأدلة المرفقة</h2>
+                <div class="role-grid">
+                    <div class="role-box" style="border-right: 4px solid var(--primary-color);">
+                       
+                                                   <span><img src="1.jpeg" width=435 height=300></span>
+                    </div>
+                    <div class="role-box" style="border-right: 4px solid var(--accent-color);">
+                                                   <span><img src="2.jpeg" width=435 height=300></span>
+                    </div>
+
+          
+        </div>
+
+    </div>
+            <div class="card">
+               
+                <div class="role-grid">
+                    <div class="role-box" style="border-right: 4px solid var(--primary-color);">
+                       
+                                                   <span><img src="3.jpeg" width=435 height=300></span>
+                    </div>
+                    <div class="role-box" style="border-right: 4px solid var(--accent-color);">
+                                                   <span><img src="4.jpeg" width=435 height=300></span>
+                    </div>
+
+          
+        </div>
+
+    </div>
+    <!-- التذييل الثابت -->
+    <footer>
+        جميع الحقوق محفوظة &copy; 2026 |   اكاديمية الملكة رانيا لتدريب المعلمين  | المعلم علاء العسولي
+    </footer>
+
+    <!-- البرمجة وجعل التنقل تفاعلياً -->
+    <script>
+        // دالة التنقل بين الصفحات
+        function switchPage(pageId) {
+            // إخفاء كافة الصفحات
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active-page'));
+
+            // إزالة الحالة النشطة من أزرار القائمة
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            // إظهار الصفحة المطلوبة وتفعيل زرها
+            document.getElementById(pageId).classList.add('active-page');
+            document.getElementById('link-' + pageId).classList.add('active');
+
+            // الصعود لأعلى الصفحة تلقائياً عند التنقل
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // بناء روابط الأدلة والشواهد في الصفحة الثانية تلقائياً
+        function generateLinks(gridId, count, prefixText) {
+            const grid = document.getElementById(gridId);
+            for (let i = 1; i <= count; i++) {
+                const link = document.createElement('a');
+                link.href = "#"; // هنا يمكنك استبدال علامة # بروابط قوقل درايف أو الملفات الحقيقية لاحقاً
+                link.className = "evidence-link";
+                link.title = `${prefixText} - الرابط ${i}`;
+                link.innerText = i;
+                grid.appendChild(link);
+            }
+        }
+
+        // تشغيل توليد الروابط عند تحميل الصفحة
+        window.onload = function() {
+            generateLinks('grid1', 10, 'أدلة المعرفة المهنية');
+            generateLinks('grid2', 30, 'أدلة الممارسة المهنية');
+            generateLinks('grid3', 8, 'أدلة الأخلاقيات المهنية');
+        };
+    </script>
+</body>
+</html>
